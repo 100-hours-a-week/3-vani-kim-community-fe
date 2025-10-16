@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+</head>
+<body>
+    <header id="header-placeholder"></header>
+
+    <main>
+        <h1>로그인</h1>
+
+        <form action="/login" method="post">
+            <div>
+                <label for="username">이메일</label> <br>
+                <input type="text" name="username" placeholder="이메일을 입력하세요">
+            </div>
+            <div>
+                <label for="password">비밀번호</label> <br>
+                <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+            </div>
+            <div>
+                <button type="submit">로그인</button>
+            </div>
+        </form> <div>
+                <a href="register.html">회원가입</a>
+            </div>
+    </main>
+
+    <script src="/common.js"></script>
+</body>
+</html>
