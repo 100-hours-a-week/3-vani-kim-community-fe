@@ -46,3 +46,6 @@ pnpm-debug.log*
 !.env.example
 
 ex.html
+
+# content
+*.png
