@@ -1,8 +1,8 @@
 import { signup } from "../api/auth.js";
-import { getPresignedUrl, uploadToS3 } from "../utils/image"
+import { getAnonymousPresignedUrl, uploadToS3 } from "../utils/image.js"
 
 //회원가입 폼의 동작 감지하기,
-document.getElementById('login-form').addEventListener('submit', async (event) => {
+document.getElementById('signup').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     //사용자의 input가져오기
@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
     if (imageFile) {
         try {
             //서버에 Presigned URL 요청
-            const{ presignedUrl, presignedKey } = await getPresignedUrl(
+            const{ presignedUrl, presignedKey } = await getAnonymousPresignedUrl(
                 imageFile.name, imageFile.type, imageFile.size);
 
             //S3에 업로드
@@ -38,11 +38,11 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
         //캐싱
         localStorage.setItem('accessToken', signupData.accessToken);
-        localStorage.setItem('refreshToken', signupData.refereshToken);
+        localStorage.setItem('refreshToken', signupData.refreshToken);
 
         // 페이지 이동
         alert('회원가입 성공');
-        window.location.href = '/main.html'; //토큰 발급도 끝났으니 바로 메인이동
+        window.location.href = '/login.html'; //토큰 발급도 끝났으니 바로 메인이동
     } catch (error) {
         console.error('회원가입 실패:', error);
         alert('회원가입에 실패했습니다.');
