@@ -37,4 +37,5 @@ export async function login(email, password) {
     } else {
         console.error(response);
     }
+    return response.json();
 }
