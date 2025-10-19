@@ -1,0 +1,1 @@
+import { fetchPosts } from '../posts.js'
