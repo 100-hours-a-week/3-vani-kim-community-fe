@@ -1,4 +1,4 @@
-import { login } from "../api/auth";
+import { login } from "../api/auth.js";
 
 // 클릭 이벤트 리스너 추가
 // Promise의 반환기다리는 await 쓰려면 async 필수임
@@ -21,7 +21,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         console.log('토큰 저장 성공');
 
         alert('로그인 성공');
-        window.location.href = '/main.html'; //토큰 발급도 끝났으니 바로 메인이동
+        window.location.href = '/index.html'; //토큰 발급도 끝났으니 바로 메인이동
     
     } catch (error) {
         console.log(error);
