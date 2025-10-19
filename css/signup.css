@@ -1,0 +1,30 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.visually-hidden{
+    display: none;
+}
+
+.image-upload-label {
+    display: inline-block; /*너비 높이를 가질 수 있도록*/
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+#profile-image{
+    width: 200px;
+    height: 200px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    display: block;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signUpPage</title>
+    <link rel="stylesheet" type="text/css" href="./css/signup.css">
+</head>
+
+<body>
+    <header id="header-placeholder"></header>
+    <main>
+        <h2>회원가입</h2>
+        <form id="signup">
+            <div class="image-uploader">
+                <label for="image-input" class="image-upload-label">프로필 이미지
+                    <img class="image-preview" src="assets/user.png" alt="프로파일 이미지 업로드" id="profile-image">
+                </label>
+
+                <input type="file" id="image-input" accept="image/*" class="visually-hidden">
+            </div>
+
+            <div>
+                <label for="email">이메일</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div>
+                <label for="passwordConfirm">비밀번호 확인</label>
+                <input type="password" id="passwordConfirm" required>
+            </div>
+
+            <div>
+                <label for="nickname">닉네임</label>
+                <input type="text" id="nickname" required>
+            </div>
+
+            <button type="submit">회원가입</button>
+        </form>
+        <a href="login.html" class="login-link">로그인하러가기</a>
+    </main>
+    <script src="./js/pages/common.js"></script>
+</body>
+</html>

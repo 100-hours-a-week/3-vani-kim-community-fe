@@ -12,7 +12,7 @@
     <main>
         <h1>로그인</h1>
 
-        <form action="/login" method="post">
+        <form id = "login">
             <div>
                 <label for="username">이메일</label> <br>
                 <input type="text" name="username" placeholder="이메일을 입력하세요">
@@ -22,13 +22,12 @@
                 <input type="password" name="password" placeholder="비밀번호를 입력하세요">
             </div>
             <div>
-                <button type="submit">로그인</button>
+                <button type="submit" id="login-button">로그인</button>
             </div>
         </form> <div>
                 <a href="register.html">회원가입</a>
             </div>
     </main>
-
-    <script src="/common.js"></script>
+    <script src="./js/pages/common.js"></script>
 </body>
 </html>
