@@ -2,11 +2,12 @@ const API_URL = "http://localhost:8080";
 
 //fetchPosts 함수를 만들어서 '수출'하기
 export async function signup(email, password, nickname, profileImageKey) {
-    const response = await fetch(`${API_URL}/auth`, {
+    const response = await fetch(`${API_URL}/auth/users`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
+        credentials: 'include',
         body: JSON.stringify({
             email: email,
             password: password,
@@ -25,7 +26,7 @@ export async function login(email, password) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('accesstoken')}` //없으면?
         },
-
+        credentials: 'include',
         body: JSON.stringify({
             "email" : email,
             "password": password,

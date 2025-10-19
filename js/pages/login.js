@@ -20,11 +20,12 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
         console.log('토큰 저장 성공');
 
-        //TODO 로그인 성공시 메인페이지 이동 추가
+        alert('로그인 성공');
+        window.location.href = '/main.html'; //토큰 발급도 끝났으니 바로 메인이동
+    
     } catch (error) {
         console.log(error);
         alert('이메일 또는 비밀번호 오류')
     }
-
-
 });
+
