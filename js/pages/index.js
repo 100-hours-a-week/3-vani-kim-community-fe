@@ -1,11 +1,11 @@
-import { getPost } from "../api/posts";
+import { getPosts } from "../api/posts";
 
 //document.addEventListener("DOMContentLoaded", function() {}
 const postListContainer = document.querySelector("#post-list");
 //뭐가 다름? ElementById도 있잖슴
 //ID 전용 검색기, CSS셀렉터 만능 검색기(# 필수, 일치하는 첫 번째 요소 찾음, ID이외로 찾거나 복잡한 조건이면)
 async function init() {
-    const posts = await getPost();
+    const posts = await getPosts();
 
     // 텅빈 목록용 컨테이너 가져오기
     const postListContainer = document.querySelector("#post-list-container");

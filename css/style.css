@@ -29,7 +29,6 @@ nav {
     position: relative;
 
     height: 50px;
-
 }
 
 .header-title {
@@ -51,4 +50,13 @@ nav {
     border-radius: 50%;
 
     object-fit: cover;
+}
+
+.back-button{
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    position: absolute;
+    left: 0;
 }
