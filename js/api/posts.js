@@ -7,8 +7,13 @@ export async function getPosts() {
 }
 
 export async function getPost(id) {
-    const response = await fetch(`${API_URL}/posts/${id}`);
-    return response.json()
+   try{
+       const response = await fetch(`${API_URL}/posts/${id}`);
+       return response.json();
+   } catch(error){
+       console.error('게시글 로드 실패', error);
+   }
+
 }
 
 export async function createPost(post) {

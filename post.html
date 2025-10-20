@@ -1,10 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글</title>
+    <link rel="stylesheet" type="text/css" href="./css/post-item.css">
+    <style>
+        .more-menu {display:none}
+        .more-menu.active {display:block}
+    </style>
 </head>
 <body>
+    <header id="header-placeholder"></header>
 
+    <main>
+
+        <article class="post" id="post-container">
+        <!--JS로 동적 렌더링 -->
+
+            <header class="post-header" data-author-id="">
+                <h3 id="post-title"></h3>
+                <a href="#" class="post-author">
+                    <img src="assets/user.png" alt="작성자 이미지">
+                    <span></span>
+                </a>
+                <time class="post-date" id="post-date" datetime=""></time>
+
+                <!--수정페이지로 이동 -->
+                <div class="post-actions" id="post-actions"></div>
+
+    <!--                <a href="/edit-post.html" class="button">수정</a>-->
+    <!--                <button type="button" onclick="checkDelete()">삭제</button>-->
+    <!--            </div>-->
+
+            </header>
+
+            <div class="post-content">
+                <!-- 확대 할 수 있어야할까?-->
+                <img src= id="post-img" alt="">
+                <p id="post-body"></p>
+            </div>
+
+            <div class="post-stats">
+                <div class="post-likes" id="post-likes"></div>
+                <div class="post-views" id="post-views">조회수</div>
+                <div class="post-comments" id="post-comments">댓글수</div>
+            </div>
+
+            <section class="post-comment">
+                <div class="comment-create">
+                    <input placeholder="댓글을 입력하세요...">
+                    <button type="button">등록</button>
+                </div>
+
+                <ul class="comment-list"></ul>
+            </section>
+        </article>
+    </main>
+    <template id = "comment-template">
+        <li data-comment-id="" data-author-id="">
+            <div class="comment-header">
+                <a href="#" class="comment-author">
+                    <img src="assets/user.png" alt="댓글 작성자 이미지">
+                    <span class="author-id"></span>
+                </a>
+                <time class="comment-date" datetime=""></time>
+            </div>
+            <div class="comment-body">
+                <p></p>
+            </div>
+
+            <div class="comment-actions">
+                <button type="button" class="more-btn">⁝</button>
+
+                <ul class="more-menu">
+                    <li><a href="#" class="button edit-btn">수정</a></li>
+                    <li><button type="button" class="delete-btn">삭제</button></li>
+                    <li><button type="button" class="report-btn">신고</button></li>
+                </ul>
+            </div>
+            <ul class="reply-list"></ul>
+        </li>
+    </template>
+    <script src="./js/pages/post.js" type="module"></script>
 </body>
 </html>
