@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글</title>
-    <link rel="stylesheet" type="text/css" href="./css/post-item.css">
+    <link rel="stylesheet" type="text/css" href="./css/post.css">
     <style>
         .more-menu {display:none}
         .more-menu.active {display:block}
@@ -42,9 +42,9 @@
             </div>
 
             <div class="post-stats">
-                <div class="post-likes" id="post-likes"></div>
-                <div class="post-views" id="post-views">조회수</div>
-                <div class="post-comments" id="post-comments">댓글수</div>
+                <div class="post-likes" id="post-likes">좋아요</div>
+                <div class="post-views" id="post-views">조회</div>
+                <div class="post-comments" id="post-comments">댓글</div>
             </div>
 
             <section class="post-comment">
@@ -57,6 +57,7 @@
             </section>
         </article>
     </main>
+    <!--댓글은 반복적이니까 템플릿화해서 사용-->
     <template id = "comment-template">
         <li data-comment-id="" data-author-id="">
             <div class="comment-header">
@@ -74,14 +75,14 @@
                 <button type="button" class="more-btn">⁝</button>
 
                 <ul class="more-menu">
-                    <li><a href="#" class="button edit-btn">수정</a></li>
-                    <li><button type="button" class="delete-btn">삭제</button></li>
                     <li><button type="button" class="report-btn">신고</button></li>
                 </ul>
             </div>
             <ul class="reply-list"></ul>
+            <div id="infinite-scroll-trigger" class="infinite-scroll"></div>
         </li>
     </template>
-    <script src="./js/pages/post.js" type="module"></script>
+<script src="./js/pages/common.js"></script>
+<script src="./js/pages/post.js" type="module"></script>
 </body>
 </html>

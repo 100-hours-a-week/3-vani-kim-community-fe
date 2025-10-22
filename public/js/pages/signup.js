@@ -32,7 +32,7 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
             return; // 회원가입 중단
         }
     }
-    //TODO 회원가입 성공 토큰 제거하기
+    //TODO 회원가입 성공 토큰 제거 고민
     try {
         const signupData = await signup(emailValue, passwordValue, nicknameValue, profileImageKey);
 

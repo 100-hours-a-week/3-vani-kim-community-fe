@@ -38,6 +38,10 @@ nav {
     text-decoration: none;
 }
 
+.header-title:hover {
+    text-decoration: none;
+}
+
 .header-user {
     position: absolute;
     right: 0;
@@ -52,11 +56,16 @@ nav {
     object-fit: cover;
 }
 
-.back-button{
+.back-button {
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
     color: black;
     position: absolute;
     left: 0;
+}
+
+.back-button:hover {
+    text-decoration: none;
+    opacity: 0.7;
 }

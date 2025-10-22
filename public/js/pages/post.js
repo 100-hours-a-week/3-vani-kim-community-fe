@@ -1,16 +1,9 @@
-import { getPost } from "../api/posts";
-import { updatePost } from "../api/posts";
-import { deletePost } from "../api/posts";
-
-//URL에서 게시글 아이디 가져오기
-const postId = new URLSearchParams(window.location.search).get("id");
+import {getPost} from "../api/postApi";
 
 document.addEventListener("DOMContentLoaded", function() {})
 
 const data = getPost(postId);
 rederPost(data);
-
-
 
 document.addEventListener("DOMContentLoaded", function (){
     const currentLoggedInUserID="postAuthorID";
@@ -19,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function (){
     if (currentLoggedInUserID === postArticle.dataset.authorId) {
         postArticle.querySelector('.post-actions').style.display = 'inline-block';
     }
-    //TODO 댓글 actions처리하기
 })
 
 //TODO
@@ -28,7 +20,7 @@ function toggleMenu(buttonElement) {
     menu.classList.toggle("active");
 }
 
-//렌더링 시작
+//게시글 렌더링 시작
 function renderPost(post) {
     document.getElementById("post-title").textContent = post.title;
     document.getElementById("post-author-id").textContent = post.authorNickname;
@@ -36,7 +28,7 @@ function renderPost(post) {
 
     const postDate = document.getElementById("post-date");
     // 보여줄 시간
-    postDate.textContent = new Date(post.createdAt).toLocaleDateString();
+    postDate.textContent = new Date(post.createdAt).toLocaleString();
     // 검색엔진 등에 노출되는 기계가 보는 시간
     postDate.dateTime = post.createdAt;
 
@@ -57,6 +49,7 @@ function renderPost(post) {
 /**
  * 게시글의 액션(수정삭제)를 DOM으로 동적으로 생성하는 메서드
  * 권한을 가진사람에게만 보여야하므로 권한 확인후 생성
+ * 버튼 렌더링과 이벤트 연결
  * */
 function setupPostActionListeners(post) {
     const postActions = document.getElementById("post-actions");
@@ -81,21 +74,11 @@ function setupPostActionListeners(post) {
     }
 }
 
-function checkPostDelete(postId) {
-
-    const isConfirmed = confirm("게시글을 삭제하시겠습니까?₩n₩n삭제한 게시글은 복구할 수 없습니다.");
-    if (isConfirmed) {
-        deletePost();
-    } else {
-        console.log("삭제 취소")
+function deletePost(postId) {
+    if (confirm(`정말 삭제하시겠습니까?₩n₩n삭제한 게시글은 복구할 수 없습니다.`)) {
+        console.log("댓글 삭제:", commentId);
     }
+    //TODO 삭제로직 필요
 }
 
-function handleCommentClick(event) {
 
-}
-//작성자에게만 수정, 삭제 표시
-function renderPostActions(post) {
-    const currentUserId = getCurrentUserId();
-
-}
