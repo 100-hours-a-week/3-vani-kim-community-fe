@@ -1,4 +1,4 @@
-import apiClient from "./api";
+import apiClient from "/js/api//api.js";
 
 const API_URL = "http://localhost:8080";
 
@@ -23,6 +23,9 @@ export async function getComments(postId, cursorId, cursorCreatedAt, size){
 export async function createComment(postId, content, parentId){
     try {
         const response = await apiClient.post(`${API_URL}/posts/${postId}/comments`, {
+        params: {
+            postId
+        },
             content,
             parentId
         });

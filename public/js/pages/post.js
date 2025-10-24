@@ -1,30 +1,21 @@
-import {getPost} from "../api/postApi";
+import { getPost, deletePost } from "/js/api/postApi.js";
 
 document.addEventListener("DOMContentLoaded", function() {})
 
-const data = getPost(postId);
-rederPost(data);
+// 게시글 상세페이지 조회를 위해 게시글에 관한 함수를 모아놓은 파일
 
-document.addEventListener("DOMContentLoaded", function (){
-    const currentLoggedInUserID="postAuthorID";
-
-    const postArticle = document.querySelector(".post");
-    if (currentLoggedInUserID === postArticle.dataset.authorId) {
-        postArticle.querySelector('.post-actions').style.display = 'inline-block';
-    }
-})
-
-//TODO
+//TODO 뭘 토글 하려고 만든지 모르겠음...
 function toggleMenu(buttonElement) {
     const menu = buttonElement.nextElementSibling;
     menu.classList.toggle("active");
 }
 
 //게시글 렌더링 시작
-function renderPost(post) {
+export function renderPost(post) {
     document.getElementById("post-title").textContent = post.title;
-    document.getElementById("post-author-id").textContent = post.authorNickname;
-    document.getElementById("post-author-link").href = `/user/${post.authorId}`;
+    document.getElementById("post-author-id").textContent = post.author.nickname;
+    // TODO 유저의 아이디가 반환값이 없음 수정 필요
+    // document.getElementById("post-author-link").href = `/user/${post.authorId}`;
 
     const postDate = document.getElementById("post-date");
     // 보여줄 시간
@@ -33,14 +24,16 @@ function renderPost(post) {
     postDate.dateTime = post.createdAt;
 
     const postImg = document.getElementById('post-img');
-    postImg.src = post.imageUrl;
+
+    //TODO 키를 넘기고있음... Presignedurl 받아야함
+    //postImg.src = imageUrl;
     postImg.alt = post.title;
 
-    document.getElementById("psot-body").textContent = post.content;
+    document.getElementById("post-body").textContent = post.contentDetail.content;
 
-    document.getElementById('post-likes').textContent = `좋아요수 ${post.likes}`
-    document.getElementById('post-views').textContent = `조회수 ${post.views}`
-    document.getElementById('post-comments').textContent = `댓글수 ${post.comments}`
+    document.getElementById('post-likes').textContent = `좋아요수 ${post.stats.likeCount}`
+    document.getElementById('post-views').textContent = `조회수 ${post.stats.viewCount}`
+    document.getElementById('post-comments').textContent = `댓글수 ${post.stats.commentCount}`
 
     //작성자 권한 탐색, 수정/삭제 버튼 생성
     setupPostActionListeners(post)
@@ -51,34 +44,44 @@ function renderPost(post) {
  * 권한을 가진사람에게만 보여야하므로 권한 확인후 생성
  * 버튼 렌더링과 이벤트 연결
  * */
-function setupPostActionListeners(post) {
+const currentUser = sessionStorage.getItem("currentUser");
+export function setupPostActionListeners(post, currentUser) {
     const postActions = document.getElementById("post-actions");
-    if(post.authorId === CURRENT_USER_ID) {
-        //DOM API로 버튼 색성하기
+    //TODO 유저 받아오기...
+    if(post.author.nickname === currentUser) {
+        //DOM API로 버튼 생성하기
         //innerHTML은 간단하지만 리스키함
         const editlink = document.createElement("a");
-        editlink.href = `/posts/${post.id}`;
+        editlink.href = `/post/${post.id}/edit`;
         editLink.className = 'button';
         editLink.textContent = '수정;';
 
         const deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
         deleteBtn.textContent ='삭제';
-
         //JS 에서 직접 이벤트 리스너 연결
         //페이지 처음 로드할때는 없었으니까
         deleteBtn.addEventListener('click', () =>{
-            checkPostDelete(post.id);
+            handleDeletePost(post.id);
         })
+
+        postActions.appendChild(editLink);
+        postActions.appendChild(deleteBtn);
 
     }
 }
 
-function deletePost(postId) {
-    if (confirm(`정말 삭제하시겠습니까?₩n₩n삭제한 게시글은 복구할 수 없습니다.`)) {
-        console.log("댓글 삭제:", commentId);
+async function handleDeletePost(postId) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+        try {
+            await deletePost(postId);
+            alert('삭제되었습니다.');
+            window.location.href = '/index'; // 메인으로
+        } catch (error) {
+            console.error('삭제 실패:', error);
+            alert('삭제에 실패했습니다.');
+        }
     }
-    //TODO 삭제로직 필요
 }
 
 

@@ -211,6 +211,7 @@ main {
 }
 
 .more-menu {
+    display:none;
     position: absolute;
     top: 100%;
     right: 0;
@@ -223,6 +224,9 @@ main {
     z-index: 10;
 }
 
+.more-menu.active {
+    display: block;
+}
 .more-menu li {
     border-bottom: none;
     padding: 0;

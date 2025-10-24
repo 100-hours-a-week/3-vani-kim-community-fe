@@ -1,8 +1,8 @@
-import apiClient from "./api";
+import apiClient from "/js/api/api.js";
 
 const API_URL = "http://localhost:8080";
 
-export async function getPosts(cursorId, cusorCreatedAt, size){
+export async function getPosts(cursorId, cursorCreatedAt, size){
     try {
         const response = await apiClient.get(`${API_URL}/posts`, {
             //null이면 포함 안시킴
