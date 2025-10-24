@@ -1,10 +1,10 @@
-import apiClient from "./api";
+import apiClient from "/js/api/api.js";
 const API_URL = "http://localhost:8080";
 
 
 export async function getUser() {
     try {
-        const response = await apiClient.post(`${API_URL}/users/me`);
+        const response = await apiClient.get(`${API_URL}/users/me`);
         return response;
     } catch (error) {
         console.error('유저 조회 실패', error.message);
