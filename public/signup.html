@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>signUpPage</title>
-    <link rel="stylesheet" type="text/css" href="./css/signup.css">
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+
+    <script src="/js/pages/common.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/js/api/api.js"></script>
+    <script src="/js/pages/signup.js" type="module"></script>
 </head>
 
 <body>
@@ -21,33 +26,32 @@
             </div>
 
             <div>
-                <label for="email">이메일</label>
-                <input type="email" id="email" required>
+                <label for="email">이메일<span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <p id="emailVerified" style="display: none;"> </p>
+
+            </div>
+
+
+            <div>
+                <label for="password">비밀번호<span class="required">*</span></label>
+                <input type="password" id="password" name="password" required>
             </div>
 
             <div>
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" required>
+                <label for="passwordConfirm">비밀번호 확인<span class="required">*</span></label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" required>
             </div>
 
             <div>
-                <label for="passwordConfirm">비밀번호 확인</label>
-                <input type="password" id="passwordConfirm" required>
-            </div>
-
-            <div>
-                <label for="nickname">닉네임</label>
+                <label for="nickname">닉네임<span class="required">*</span></label></label>
                 <input type="text" id="nickname" required>
+                <p id="nicknameVerified" style="display: none;"> </p>
             </div>
 
             <button type="submit">회원가입</button>
         </form>
-        <a href="login.html" class="login-link">로그인하러가기</a>
+        <a href="/login" class="login-link">로그인하러가기</a>
     </main>
-    <script src="./js/pages/common.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <script typet="module" src="./js/api/api.js" defer></script>
-    <script src="./js/pages/signup.js" type="module"></script>
 </body>
 </html>
