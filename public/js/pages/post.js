@@ -44,15 +44,15 @@ export function renderPost(post) {
  * 권한을 가진사람에게만 보여야하므로 권한 확인후 생성
  * 버튼 렌더링과 이벤트 연결
  * */
-const currentUser = sessionStorage.getItem("currentUser");
-export function setupPostActionListeners(post, currentUser) {
+
+export function setupPostActionListeners(post) {
     const postActions = document.getElementById("post-actions");
-    //TODO 유저 받아오기...
+    const currentUser = sessionStorage.getItem("currentUser");
     if(post.author.nickname === currentUser) {
         //DOM API로 버튼 생성하기
         //innerHTML은 간단하지만 리스키함
-        const editlink = document.createElement("a");
-        editlink.href = `/post/${post.id}/edit`;
+        const editLink = document.createElement("a");
+        editLink.href = `/post/${post.id}/edit`;
         editLink.className = 'button';
         editLink.textContent = '수정;';
 
@@ -71,6 +71,8 @@ export function setupPostActionListeners(post, currentUser) {
     }
 }
 
+
+// 게시글 삭제하기
 async function handleDeletePost(postId) {
     if (confirm("정말 삭제하시겠습니까?")) {
         try {
