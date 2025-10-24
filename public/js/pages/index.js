@@ -1,4 +1,4 @@
-import { getPosts } from "../api/postApi";
+import { getPosts } from "/js/api/postApi.js";
 
 let isloading = false;
 let hasMore = true;
@@ -7,6 +7,9 @@ let currentCursor = {
     createdAt: undefined
 };
 const PAGE_SIZE = 20;
+const postListContainer = document.querySelector('.post-list-container');
+//뭐가 다름? ElementById도 있잖슴
+//ID 전용 검색기 <-> CSS셀렉터 만능 검색기(# 필수, 일치하는 첫 번째 요소 찾음, ID이외로 찾거나 복잡한 조건이면)
 
 async function loadNextPage() {
     // 이미 로딩중이거나, 더이상 데이터 없다면 중단
@@ -21,14 +24,14 @@ async function loadNextPage() {
         newPosts.forEach(post => {
             const postHtml=`
                 <li class="post-item">
-                    <a href="post-details.html?id=${post.postId}">
+                    <a href="/post/${post.postId}">
                         <div class="content-area">
                             <h2 class="post-title">${post.title}</h2>
                             <div class="post-meta">
                                 <div class="post-stats">
-                                    <div class="likes">좋아요 ${post.status.likeCount}</div>
-                                    <div class="comments">댓글 ${post.status.commentCount}</div>
-                                    <div class="views">조회수 ${post.status.viewCount}</div>
+                                    <div class="likes">좋아요 ${post.stats.likeCount}</div>
+                                    <div class="comments">댓글 ${post.stats.commentCount}</div>
+                                    <div class="views">조회수 ${post.stats.viewCount}</div>
                                 </div>
                                 <time class="post-date" datetime="${post.createdAt}">
                                     ${new Date(post.createdAt).toLocaleDateString()}
@@ -38,7 +41,7 @@ async function loadNextPage() {
                         <footer class="author-area">
                         
                             <!--TODO S3문제 해결-->
-                            <img src="${post.author.imageUrl || 'assets/author.png'}"> 
+<!--                            <img src="${post.author.imageUrl || 'assets/author.png'}"> -->
                             <span>${post.author.nickname}</span>
                         </footer>
                     </a>
@@ -94,6 +97,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
     loadNextPage();
 });
 
-const postListContainer = document.querySelector("#post-list");
-//뭐가 다름? ElementById도 있잖슴
-//ID 전용 검색기 <-> CSS셀렉터 만능 검색기(# 필수, 일치하는 첫 번째 요소 찾음, ID이외로 찾거나 복잡한 조건이면)
+
