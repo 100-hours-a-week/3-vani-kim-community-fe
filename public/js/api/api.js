@@ -10,10 +10,10 @@ const apiClient = axios.create({
 //요청 인터셉터
 apiClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token");
+        const accessToken = localStorage.getItem("accessToken");
 
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
+        if (accessToken) {
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
         config.headers['Content-Type'] = 'application/json';
@@ -27,6 +27,8 @@ apiClient.interceptors.request.use(
 )
 
 //응답 인터셉터
+//TODO 토큰 갱신안되는데 확인 필요함...
+
 apiClient.interceptors.response.use(
     //성공적인 응답
     //204 같은건 자동처리
