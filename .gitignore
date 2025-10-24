@@ -49,3 +49,6 @@ ex.html
 
 # content
 *.png
+
+# json
+*.json
