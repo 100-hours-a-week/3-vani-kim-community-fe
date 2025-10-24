@@ -1,3 +1,39 @@
+// window.addEventListener('pageshow', (event) => {
+//     if (event.persisted) {
+//         console.log('This page was restored from the bfcache.');
+//     } else {
+//         console.log('This page was loaded normally.');
+//     }
+// });
+
+window.addEventListener('pagehide', (event) => {
+    if (event.persisted) {
+        console.log('This page *might* be entering the bfcache.');
+    } else {
+        console.log('This page will unload normally and be discarded.');
+    }
+});
+
+//TODO 유저 정보 유지 방법...
+
+// (async function initAuth() {
+//     // 세션에 유저 정보 확인
+//     let currentUser = authStore.getUser();
+//
+//     //세션에 없으면...토큰으로 요청
+//     if(!currentUser) {
+//         const token = authStore.getToken();
+//
+//         if(token) {
+//             try [
+//                 const
+//             ]
+//         }
+//     }
+//
+// })
+
+
 // 페이지의 돔이 모두 로드되면 실행합니다.
 document.addEventListener("DOMContentLoaded", function() {
 
