@@ -3,8 +3,8 @@ import {getComments} from "/js/api/comments.js";
 
 /**
  * 템플릿을 이용해서 댓글을 랜더링하는 합수
+ * @param comment :요청을 통해 가져온 comment 객체
  * */
-
 export function renderComment(comment) {
 
     const currentUser = sessionStorage.getItem("currentUser");
@@ -37,12 +37,13 @@ export function renderComment(comment) {
 
         actionMenu.prepend(editLi, deleteLi);
     }
-    //TODO 대댓글 처리하기
+    //TODO 대댓글 처리하기 쓰래드로 처리
     return commentLi;
 }
 
 /**
- * 댓글의 액션 버튼 클릭은 다루는 함수
+ * 댓글의 액션 버튼 클릭을 다루는 함수
+ * @param event : 클릭이벤트
  * */
 export function handleCommentClick(event) {
     const clickedElement = event.target;
@@ -67,18 +68,21 @@ export function handleCommentClick(event) {
     }
 }
 
+//TODO 댓글도 삭제로직 필요
 function checkCommentDelete(commentId) {
     if (confirm(`정말 삭제하시겠습니까?₩n₩n삭제한 게시글은 복구할 수 없습니다.`)) {
         console.log("댓글 삭제:", commentId);
     }
-    //TODO 댓글도 삭제로직 필요
 }
 
 let currentCursor = null;
 let isloading = false;
 let hasMore = true;
 let observer;
-// API요청이 있으니까 async
+
+/**
+ * 댓글 목록의 무한스크롤을 담당하는 함수, 다음 커서에 대한 댓글들을 불러옴
+ * */
 async function loadNextPage() {
     // 이미 로딩중이거나, 더이상 데이터 없다면 중단
     if (isloading||!hasMore) return;
@@ -99,6 +103,9 @@ async function loadNextPage() {
     }
 }
 
+/**
+ * 무한페이징을 위한 옵저버 함수, 앵커 10이상부터 콜백
+ * */
 function createObserver() {
     const trigger = document.getElementById('infinite-scroll-trigger');
 
@@ -122,7 +129,7 @@ function createObserver() {
 
 /**
  * 댓글 등록 폼(입력창, 등록 버튼)에 이벤트 리스너를 설정하는 함수
- *
+ * @param postId : 댓글이 달릴 게시글의 아이디
  * */
 export function setupCommentForm(postId) {
     const commentInput = document.getElementById('comment-input');

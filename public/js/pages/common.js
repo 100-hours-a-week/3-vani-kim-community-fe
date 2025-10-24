@@ -1,19 +1,3 @@
-// window.addEventListener('pageshow', (event) => {
-//     if (event.persisted) {
-//         console.log('This page was restored from the bfcache.');
-//     } else {
-//         console.log('This page was loaded normally.');
-//     }
-// });
-
-window.addEventListener('pagehide', (event) => {
-    if (event.persisted) {
-        console.log('This page *might* be entering the bfcache.');
-    } else {
-        console.log('This page will unload normally and be discarded.');
-    }
-});
-
 //TODO 유저 정보 유지 방법...
 
 // (async function initAuth() {
@@ -50,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return response.text();
     })
     .then(html => {
-        // 가져온 내용을 placehoder에 넣기
+        // 가져온 내용을 placehoLder에 넣기
         headerPlaceholder.innerHTML = html;
     })
     .catch(error => {
@@ -62,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
 /**
  * 사용자가 선택한 이미지의 미리보기를 띄워주는 메서드
  * */
+//TODO
 function initImageUploader() {
     // 이미지 업로더 찾고
     const Uploader = document.querySelector('.image-uploader');
