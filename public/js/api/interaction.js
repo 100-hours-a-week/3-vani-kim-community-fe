@@ -1,4 +1,4 @@
-import apiClient from "./api";
+import apiClient from "/js/api/api.js";
 
 const API_URL = "http://localhost:8080";
 
