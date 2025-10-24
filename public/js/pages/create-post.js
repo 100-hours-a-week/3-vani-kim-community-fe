@@ -1,4 +1,4 @@
-import { creatPost } from "../api/postApi.js";
+import { creatPost } from "/js/api/postApi.js";
 
 // 클릭 이벤트 리스너 추가
 // Promise의 반환기다리는 await 쓰려면 async 필수임
