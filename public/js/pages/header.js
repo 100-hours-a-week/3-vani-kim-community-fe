@@ -1,1 +1,0 @@
-import { fetchPosts } from '../postApi.js'
