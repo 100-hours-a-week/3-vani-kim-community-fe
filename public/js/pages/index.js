@@ -11,6 +11,9 @@ const postListContainer = document.querySelector('.post-list-container');
 //뭐가 다름? ElementById도 있잖슴
 //ID 전용 검색기 <-> CSS셀렉터 만능 검색기(# 필수, 일치하는 첫 번째 요소 찾음, ID이외로 찾거나 복잡한 조건이면)
 
+//TODO : 게시글목록 <template>방식으로 변경
+/**
+ * */
 async function loadNextPage() {
     // 이미 로딩중이거나, 더이상 데이터 없다면 중단
     if (isloading||!hasMore) return;
