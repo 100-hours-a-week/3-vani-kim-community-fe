@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>게시글 작성</title>
     <link rel="stylesheet" type="text/css" href="/css/create-post.css">
+    <link rel="stylesheet" href="/css/layout.css">
+
     <script src="/js/pages/common.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="./js/api/api.js"></script>
     <script src="/js/pages/create-post.js" type="module"></script>
 </head>
 <body>
-    <header id="header-placeholder"></header>
+<div id="header-placeholder"></div>
     <!-- TODO 여러이미지 업로드 -->
     <main>
         <h3>게시글 작성</h3>
@@ -24,12 +26,13 @@
                 <label>내용<span class="required">*</span></label>
                 <textarea id="content" name="content" required></textarea>
             </div>
-            <div class="post-form-group">
-                <label for="image">이미지</label>
-                <label class="image-upload" for="image">
+            <div class="post-image-upload">
+                <label class="image-upload-label" for="image-input">이미지
+                    <img class="image-preview" id="image-preview" src="assets/user.png" alt="프로파일 이미지 미리보기">
                     <span class="upload-text">클릭하여 이미지 업로드</span>
                 </label>
-                <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+
+                <input type="file" id="image-input" name="image" accept="image/*" style="display: none;">
             </div>
 
 
@@ -38,5 +41,6 @@
             </div>
         </form>
     </main>
+<div id="footer-placeholder"></div>
 </body>
 </html>
