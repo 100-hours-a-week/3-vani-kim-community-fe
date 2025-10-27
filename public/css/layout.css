@@ -24,7 +24,6 @@ body {
     flex: 1;       /* (중요) 헤더/풋터 제외 남는 공간 모두 차지 */
 
     /* 사이드바가 있는 페이지의 전체 너비 */
-    width: 90%;
     max-width: var(--main-width-wide);
 
     margin: 20px auto; /* 중앙 정렬 및 위아래 여백 */

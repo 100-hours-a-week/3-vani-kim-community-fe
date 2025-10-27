@@ -40,6 +40,57 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 });
 
+//드롭다운 토글
+document.addEventListener('DOMContentLoaded', () =>{
+    document.addEventListener('click', (event) => {
+
+        const trigger = document.getElementById('user-menu-trigger');
+        const dropdown = document.getElementById('user-dropdown');
+
+        if(!trigger || !dropdown) return;
+
+        // 프로필 아이콘을 클릭했는지 확인
+        if (trigger.contains(event.target)) {
+            dropdown.classList.add('show');
+        }
+        else if (!dropdown.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    //로그 아웃 버튼 로직
+    // 나중에 생기니가 document에 위임
+    document.addEventListener('click', (event) => {
+        if (event.target.matches('#logout-button')) {
+            event.preventDefault(); //a태그 기본 동작 방지(페이지 이동)
+            handleLogout();
+        }
+    });
+});
+
+
+/**
+ * 로그아웃 처리 함수, 세션/로컬 스토리지의 토큰과 사용자 정보 삭제
+ * */
+function handleLogout() {
+    if (confirm("정말 로그아웃하시겠습니까?")) {
+
+        // 1.세션 스토리지의 토큰 및 사용자 정보 삭제
+        //    (로그인 시 저장했던 모든 키를 삭제해야 함)
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem("currentUser");
+
+        // 2. TODO 서버에 로그아웃 API 호출 (블랙리스트/DB 토큰 삭제 등)
+        // (예: await api.post('/auth/logout');)
+        // ...
+
+        // 3. 로그인 페이지로 리다이렉트
+        alert("로그아웃되었습니다.");
+        window.location.href = '/login'; // 로그인 페이지 경로
+    }
+}
+
 /**
  * ID에 HTML을 주입하고, ID가 없는 경우 경고를 출력하는 헬퍼 함수
  * @param {string} id - HTML이 주입될 placeholder div의 ID
@@ -60,3 +111,4 @@ function injectHtml(id, html, isError = false) {
         console.warn(`'#${id}' 플레이스홀더가 현재 페이지에 없습니다.`);
     }
 }
+
