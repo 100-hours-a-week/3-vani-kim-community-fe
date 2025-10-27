@@ -54,7 +54,7 @@ async function loadNextPage() {
             postDate.datetime = date.toISOString();
             postDate.textContent = date.toLocaleDateString();
 
-            authorNickname.textContent = post.authorNickname;
+            authorNickname.textContent = post.author.nickname;
             // authorImage.src = post.author.imageUrl || 'assets/author.png';
 
             // 완성된 li들을 ul에 추가
