@@ -2,7 +2,7 @@ import { renderPost, setupPostActionListeners } from '/js/pages/post.js'
 import { getPost, getPosts} from "/js/api/postApi.js";
 import { createComment, getComments } from "/js/api/comments.js";
 import { handleCommentClick, renderComment, setupCommentForm } from "/js/pages/comment.js";
-
+import { like } from "/js/api/interaction.js";
 document.addEventListener("DOMContentLoaded", function (){
 
     const currentLoggedInUserID="postAuthorID";
@@ -12,6 +12,72 @@ document.addEventListener("DOMContentLoaded", function (){
         postArticle.querySelector('.post-actions').style.display = 'inline-block';
     }
 })
+let isProcessingLike = false;
+
+/**
+ * 좋아요 버튼 상태에 따른 Api를 호출하고 좋아요수를 변화시키는 함수
+ * @param postId 현재 게시글 아이디
+ * @param isLiked 게시글 진입시 사용자의 좋아요 여부
+ * @param likeCount 게시글 집입시 좋야요 수
+ * */
+
+function setupLikeButton(postId, isLiked, likeCount) {
+
+    const likeButton = document.getElementById("like-button");
+    const likeCountSpan = document.getElementById("like-count");
+
+    //초기 상태 설정
+    let currentIsLiked = isLiked;
+    let currentLikeCount = likeCount;
+    updateLikeUI(currentIsLiked, currentLikeCount);
+
+    //클릭 이벤트
+    likeButton.addEventListener("click", async () => {
+        if (isProcessingLike) return; //서버 응답대기중이면 무시
+        isProcessingLike = true;
+
+        //낙관적 업데이트
+        const previousIsLiked = currentIsLiked;
+        const previousLikeCount = currentLikeCount;
+
+        currentIsLiked = !previousIsLiked;
+        currentLikeCount = previousIsLiked ? previousLikeCount - 1 : previousLikeCount + 1;
+        updateLikeUI(currentIsLiked, currentLikeCount);
+
+        try{
+            if (currentIsLiked) {
+                await like(postId);
+            } else {
+                await like(postId);
+            }
+
+        } catch(error) {
+            console.error("좋아요 처리 실패 :", error);
+            alert("좋아요 처리에 실패했습니다. 다시 시도해 주세요")
+
+            currentIsLiked=previousIsLiked;
+            currentLikeCount=previousLikeCount;
+            updateLikeUI(currentIsLiked, currentLikeCount);
+        } finally {
+            isProcessingLike = false;
+        }
+    })
+}
+
+/**
+ * UI업데이트 전용 함수
+ * @param isLiked 사용자가 좋아요 상태인지 여부
+ * @param count 좋아요 수
+ * */
+function updateLikeUI(isLiked, count) {
+    const likeButton = document.getElementById('like-button');
+    const likeCountSpan = document.getElementById("post-likes");
+
+    likeButton.textContent = isLiked ? '❤️ 좋아요 취소' : '🤍 좋아요';
+    likeButton.classList.toggle('liked', isLiked);
+    likeCountSpan.textContent = `좋아요 ${count}`;
+}
+
 //URL에서 게시글 아이디 가져오기
 const path = window.location.pathname;
 const parts = path.split('/');
@@ -43,6 +109,8 @@ async function initPage() {
 
         renderPost(post);
 
+        setupLikeButton(post.postId, post.stats.isLiked, post.stats.likeCount);
+
         const commentListContainer = document.getElementById('comment-list');
 
         const fragment = new DocumentFragment();
@@ -67,3 +135,4 @@ async function initPage() {
 }
 
 initPage();
+
