@@ -17,22 +17,47 @@
 </head>
 <body>
 <div id="header-placeholder"></div>
-    <main>
+<!--    <div class="main-wrapper no-sidebar">-->
+    <main class="content">
         <h4 class="greetings">안녕하세요,<br>아무 말 대잔치 <strong>게시판</strong>입니다.</h4>
+
         <div class="post-section">
             <div class="post-creation">
-                <a href="create-post.html"><button type="button" id="post-creation">게시글 작성</button></a>
+                <a href="/post"><button type="button" id="post-creation">게시글 작성</button></a>
             </div>
-            <ul class="post-list-container">
-                <li class="post-item">
 
-                </li>
-            </ul>
-            <a href="post.html"></a>
+            <ul class="post-list-container">
+                </ul>
+            <div id="infinite-scroll-trigger"></div>
+
+            <div id="end-of-list-message">
+                <p>모든 게시글을 불러왔습니다.</p>
         </div>
 
     </main>
-<div id="footer-placeholder"></div>
+<!--    </div>-->
+    <div id="footer-placeholder"></div>
+    <template id="post-item-template">
+        <li class="post-item">
+            <a href="/post/placeholder-id" class="post-link">
+                <div class="content-area">
+                    <h2 class="post-title">게시글 제목</h2>
+                    <div class="post-meta">
+                        <div class="post-stats">
+                            <div class="likes">좋아요수 0</div>
+                            <div class="views">조회수 0</div>
+                            <div class="comments">댓글수 0</div>
+                        </div>
+                        <time class="post-date" datetime=""></time>
+                    </div>
+                </div>
+                <footer class="author-area">
+<!--                    TODO s3문제 해결해야함-->
+                    <span class="author-nickname">작성자</span>
+                </footer>
+            </a>
+        </li>
+    </template>
 
 </body>
 

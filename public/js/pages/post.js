@@ -52,7 +52,7 @@ export function setupPostActionListeners(post) {
         //DOM API로 버튼 생성하기
         //innerHTML은 간단하지만 리스키함
         const editLink = document.createElement("a");
-        editLink.href = `/post/${post.id}/edit`;
+        editLink.href = `/post/${post.postId}/edit`;
         editLink.className = 'button';
         editLink.textContent = '수정;';
 
@@ -62,7 +62,7 @@ export function setupPostActionListeners(post) {
         //JS 에서 직접 이벤트 리스너 연결
         //페이지 처음 로드할때는 없었으니까
         deleteBtn.addEventListener('click', () =>{
-            handleDeletePost(post.id);
+            handleDeletePost(post.postId);
         })
 
         postActions.appendChild(editLink);
@@ -70,6 +70,7 @@ export function setupPostActionListeners(post) {
 
     }
 }
+
 
 
 // 게시글 삭제하기

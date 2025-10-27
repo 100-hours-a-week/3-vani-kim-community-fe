@@ -1,6 +1,6 @@
 import { getPosts } from "/js/api/postApi.js";
 
-let isloading = false;
+let isLoading = false;
 let hasMore = true;
 let currentCursor = {
     id: undefined,
@@ -8,68 +8,82 @@ let currentCursor = {
 };
 const PAGE_SIZE = 20;
 const postListContainer = document.querySelector('.post-list-container');
+const postTemplate = document.getElementById('post-item-template');
+
+const scrollTrigger = document.getElementById('infinite-scroll-trigger');
+const endMessage = document.getElementById('end-of-list-message');
 //뭐가 다름? ElementById도 있잖슴
 //ID 전용 검색기 <-> CSS셀렉터 만능 검색기(# 필수, 일치하는 첫 번째 요소 찾음, ID이외로 찾거나 복잡한 조건이면)
 
-//TODO : 게시글목록 <template>방식으로 변경
 /**
+ * 다음 페이지를 불러오는 함수
  * */
 async function loadNextPage() {
     // 이미 로딩중이거나, 더이상 데이터 없다면 중단
-    if (isloading||!hasMore) return;
-    isloading = true;
+    if (isLoading||!hasMore) return;
+    isLoading = true;
 
     try {
         const response = await getPosts(currentCursor.id, currentCursor.createdAt, PAGE_SIZE);
+        const newPosts = response.items;
 
-        const newPosts = response.items
-
+        //템플릿을 이용하여 DOM 생성하기
         newPosts.forEach(post => {
-            const postHtml=`
-                <li class="post-item">
-                    <a href="/post/${post.postId}">
-                        <div class="content-area">
-                            <h2 class="post-title">${post.title}</h2>
-                            <div class="post-meta">
-                                <div class="post-stats">
-                                    <div class="likes">좋아요 ${post.stats.likeCount}</div>
-                                    <div class="comments">댓글 ${post.stats.commentCount}</div>
-                                    <div class="views">조회수 ${post.stats.viewCount}</div>
-                                </div>
-                                <time class="post-date" datetime="${post.createdAt}">
-                                    ${new Date(post.createdAt).toLocaleDateString()}
-                                </time>                            
-                            </div>
-                        </div>
-                        <footer class="author-area">
-                        
-                            <!--TODO S3문제 해결-->
-<!--                            <img src="${post.author.imageUrl || 'assets/author.png'}"> -->
-                            <span>${post.author.nickname}</span>
-                        </footer>
-                    </a>
-                </li>
-            `;
+            // 템플릿의 태그 안의 내용(li)를 복제
+            // true는 템플릿 내부늬 모든 자식 요소까지 깊게 복사하라는 의미
+            const postFragment = postTemplate.content.cloneNode(true);
 
-            // 완성 박스 <ul>컨테이너에 추가하기
-            postListContainer.insertAdjacentHTML("beforeend", postHtml);
+            // 조각들 안에서 요소 탐색
+            const postLink = postFragment.querySelector('.post-link');
+            const postTitle = postFragment.querySelector('.post-title');
+            const likes = postFragment.querySelector('.likes');
+            const comments = postFragment.querySelector('.comments');
+            const views = postFragment.querySelector('.views');
+            const postDate = postFragment.querySelector('.post-date');
+            // const authorImage = postFragment.querySelector('.author-image');
+            const authorNickname = postFragment.querySelector('.author-nickname');
 
-        })
+            //템플릿 채우기
+            postLink.href = `/post/${post.postId}`;
+            postTitle.textContent = post.title;
+            likes.textContent = `좋아요 수 ${post.stats.likeCount}`;
+            views.textContent = `조회수 ${post.stats.viewCount}`;
+            comments.textContent = `댓글수 ${post.stats.commentCount}`;
+
+            const date = new Date(post.createdAt);
+            postDate.datetime = date.toISOString();
+            postDate.textContent = date.toLocaleDateString();
+
+            authorNickname.textContent = post.authorNickname;
+            // authorImage.src = post.author.imageUrl || 'assets/author.png';
+
+            // 완성된 li들을 ul에 추가
+            postListContainer.appendChild(postFragment);
+        });
 
         hasMore = response.hasMore;
 
         if (hasMore) {
-            currentCursor.id = response.nextCursor.id;
-            currentCursor.createdAt = nextCursor.createdAt;
+            currentCursor.id = response.nextCursor.id; // TODO 헷깔려~ postId가 맞지 않냐?
+            currentCursor.createdAt = response.nextCursor.createdAt;
         }
 
         if(!hasMore) {
+            // TODO 사용자에게도
             console.log("마지막 페이지");
+
+            if (endMessage) {
+                endMessage.style.display = 'block';
+            }
+
+            if (scrollTrigger) {
+                scrollTrigger.style.display = 'none';
+            }
         }
     } catch (error) {
         console.error("다음 페이지 로딩 실패: ", error);
     } finally {
-        isloading = false;
+        isLoading = false;
     }
 }
 
@@ -86,7 +100,7 @@ function createObserver() {
     };
 
     const callback = (entries) => {
-        if (entries[0].isIntersecting && !isloading) {
+        if (entries[0].isIntersecting && !isLoading) {
             loadNextPage();
         }
     };

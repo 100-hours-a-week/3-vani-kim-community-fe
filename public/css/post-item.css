@@ -85,4 +85,12 @@ a:hover {
     object-fit: cover;
 }
 
-
+.infinite-scroll-trigger{
+    height: 50px;
+}
+.end-of-list-message{
+    display: none;
+    text-align: center;
+    color: #888;
+    padding: 20px 0;
+}
