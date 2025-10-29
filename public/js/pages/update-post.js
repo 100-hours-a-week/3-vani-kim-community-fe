@@ -21,7 +21,7 @@ async function initPage() {
 
         // 폼에 기존 데이터 채우기
         document.getElementById('title').value = currentPost.title;
-        document.getElementById('content').value = currentPost.content;
+        document.getElementById('content').value = currentPost.contentDetail.content;
 
         // 기존 이미지가 있으면 표시
         if (currentPost.postImageKey) {
