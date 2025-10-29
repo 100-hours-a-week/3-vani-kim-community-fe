@@ -39,10 +39,10 @@ document.getElementById('post-form').addEventListener('submit', async (event) =>
     const content = document.getElementById('content').value;
     //TODO S3 연동해야함+이미지 처리로직
     //입력으로 받은 이미지파일
-    // const imageFile = document.getElementById('image-input').files[0];
+    const imageFile = document.getElementById('image-input').files[0];
 
     //이미지 처리
-    let profileImageKey = null;
+    let postImageKey = null;
     if (imageFile) {
         try {
             //서버에 Presigned URL 요청

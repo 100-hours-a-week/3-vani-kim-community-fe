@@ -21,7 +21,7 @@ export async function signup(email, password, nickname, profileImageKey) {
 //로그인 요청
 export async function login(email, password) {
     try {
-        const response = await apiClient.post(`/auth/tokens`, {
+        const response = await apiClient.post(`/auth/session`, {
             email,
             password,
         });

@@ -181,7 +181,7 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
     const nicknameValue = document.getElementById('nickname').value;
 
     //입력으로 받은 이미지파일
-    // const imageFile = document.getElementById('image-input').files[0];
+    const imageFile = document.getElementById('image-input').files[0];
 
     //이미지 처리
     let profileImageKey = null;
