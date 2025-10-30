@@ -12,14 +12,10 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
     try {
         // login 함수 반환 대기
-        const tokens = await login(emailValue, passwordValue);
-        const currentUser = tokens.nickname;
-        // 각각 다른 이름(키)로 localStorage에 저장
-        localStorage.setItem("accessToken", tokens.accessToken);
-        localStorage.setItem("refreshToken", tokens.refreshToken);
+        const res = await login(emailValue, passwordValue);
+        const currentUser = res.nickname;
+        console.log('세션 저장 성공');
         sessionStorage.setItem("currentUser", currentUser );
-        console.log('토큰 저장 성공');
-
         alert('로그인 성공');
         window.location.href = '/index.html'; //토큰 발급도 끝났으니 바로 메인이동
     
