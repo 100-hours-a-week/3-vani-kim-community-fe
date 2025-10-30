@@ -31,6 +31,16 @@ export async function login(email, password) {
         throw error;
     }
 }
+// 로그아웃 요청
+export async function logout() {
+    try {
+        const response = await apiClient.post(`/auth/logout`);
+        return response;
+    } catch (error) {
+        console.error('로그아웃 실패', error.message);
+        throw error;
+    }
+}
 
 //이메일 중복 검증 TODO 다른 메서드 HEAD등 고민
 export async function emailCheck(email) {

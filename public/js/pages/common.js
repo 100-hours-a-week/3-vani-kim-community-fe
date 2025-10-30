@@ -1,4 +1,4 @@
-
+import { logout } from "/js/api/auth.js";
 document.addEventListener("DOMContentLoaded", function() {
 
     // 1. fetch로 layout.html 파일을 한 번만 가져옴
@@ -72,20 +72,13 @@ document.addEventListener('DOMContentLoaded', () =>{
 /**
  * 로그아웃 처리 함수, 세션/로컬 스토리지의 토큰과 사용자 정보 삭제
  * */
-function handleLogout() {
+async function handleLogout() {
     if (confirm("정말 로그아웃하시겠습니까?")) {
 
-        // 1.세션 스토리지의 토큰 및 사용자 정보 삭제
-        //    (로그인 시 저장했던 모든 키를 삭제해야 함)
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        sessionStorage.removeItem("currentUser");
+        // 1. 로그아웃 요청
+        await logout();
 
-        // 2. TODO 서버에 로그아웃 API 호출 (블랙리스트/DB 토큰 삭제 등)
-        // (예: await api.post('/auth/logout');)
-        // ...
-
-        // 3. 로그인 페이지로 리다이렉트
+        // 2. 로그인 페이지로 리다이렉트
         alert("로그아웃되었습니다.");
         window.location.href = '/login'; // 로그인 페이지 경로
     }
