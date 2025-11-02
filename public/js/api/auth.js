@@ -24,10 +24,26 @@ export async function login(email, password) {
         const response = await apiClient.post(`/auth/tokens`, {
             email,
             password,
+        }, {
+            returnFullResponse: true // 로그인 해더 처리를 위해 data말고 응답반환을 시키는 플래그
         });
-        return response;
+        return {
+            nickname : response.data.nickname,
+            authHeader : response.headers.authorization,
+        }
     } catch (error) {
         console.error('로그인 실패', error.message);
+        throw error;
+    }
+}
+
+// 로그아웃 요청
+export async function logout() {
+    try {
+        const response = await apiClient.post(`/auth/logout`);
+        return response;
+    } catch (error) {
+        console.error('로그아웃 실패', error.message);
         throw error;
     }
 }
