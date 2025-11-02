@@ -1,10 +1,10 @@
-//import axios from "axios";
 const API_URL = "http://localhost:8080";
 //axios 인스턴스 생성
 //응답대기 5초
 const apiClient = axios.create({
     baseURL: API_URL,
     timeout: 5000,
+    withCredentials: true
 });
 
 //요청 인터셉터
@@ -27,57 +27,126 @@ apiClient.interceptors.request.use(
 )
 
 //응답 인터셉터
-//TODO 토큰 갱신안되는데 확인 필요함...
+//TODO 갱신 요청은 필터 없이들어가서 오류의 형식이달라 문제 발생
+//요청 대기열, 게시글 상세페이지등 한페이지에 여러 api요청이 있으면 여러번 갱신 요청 방지
+let isRefreshing = false; // 토큰 갱신 중 여부 확인용
+let failedQueue = []; // 갱신을 기다리는 요청 대기열
+//대기열을 처리하는 함수
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error); // 갱신 실패 시, 기다리던 요청들도 실패 처리
+        } else {
+            prom.resolve(token); // 갱신 성공시, 새 토큰으로 요청 재시도
+        }
+    });
+    failedQueue = [] // 대기열 비우기
+};
 
 apiClient.interceptors.response.use(
     //성공적인 응답
     //204 같은건 자동처리
     (response) => {
         console.log('Axios 성공:', response.status);
+        if (response.config.returnFullResponse) {
+            return response;
+        }
         return response.data;
     },
     //실패한 응답
     async (error) => {
         const originalRequest = error.config;
+
+        // 401 에러가 아니거나, data가 없으면 그냥 실패 처리
+        if (error.response.status !== 401 || !error.response.data) {
+            console.er
+            ror('Axios 실패, (Non-401):', error,response?.status, error.response.data);
+            return Promise.reject(error);
+        }
+
         const errorData = error.response.data;
 
-        // 401이고 에러데이터 있는지(토큰 오류 확인용)
-        if (error.response.status === 401 && errorData && !originalRequest._isRetry) {
+        //T002 : 토큰 갱신 로직
+        if (errorData.code === "T002") {
 
-            if (errorData.code === 'T001') {
-                console.log("토큰 민료, 갱신 시도");
-                originalRequest._isRetry = true; // 무한 재시도 방지
+            //지금 갱신 중이라면
+            if (isRefreshing) {
+                console.log("토큰 갱신 중, 대기열에 추가합니다.");
+                //갱신 완료시까지 Promise반환하며 대기
+                return new Promise((resolve, reject) => {
+                    failedQueue.push(
+                        //failed Queue 에 추가될 객체
+                        //resolve와 reject라는 두 개의 키를 가짐
+                        //이 키들의 값으로 함수를 할당
+                        {
+                            resolve: (token) => {
+                                // 갱신 성공시 원래 요청 재시도하기
+                                originalRequest.headers.authorization = 'Bearer ' + token;
+                                resolve(apiClient(originalRequest));
+                            },
+                            reject: (err)=> {
+                        reject(err);
+                            }
+                        });
+                });
 
-                try {
-                    const refreshToken = localStorage.getItem("refreshToken");
-                    const response = await axios.post(`${API_URL}/auth/refresh`, {
-                        refreshToken: refreshToken,
-                    });
-
-                    const newAccessToken = response.data.accessToken;
-                    const newRefreshToken = response.data.refreshToken;
-                    localStorage.setItem("refreshToken", newRefreshToken);
-                    localStorage.setItem("accessToken", newAccessToken);
-
-                    originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return apiClient(originalRequest);
-                } catch (refreshError) {
-                    // 갱신도 못했으면 로그아웃
-                    console.error("토큰 갱신 실패", refreshError);
-                    // window.location.href = "/login"; //API 통신 모듈이 하기에 적절하지 않음
-                    return Promise.reject(refreshError);
-                }
             }
+            // 첫 401을 받았을 경우
+            isRefreshing = true; // 갱신 시작(플래그 true)
+            originalRequest._isRetry = true; // 무한 루프 방지용
+            console.log("토큰 만료, 갱신 시도(첫 번째)")
 
-            else if(errorData.code === 'T002' || errorData.code === 'T003') {
-                console.error("유효하지 않으 토큰, 강제 로그아웃", errorData.message);
-                // window.location.href = "/login";
+            try {
+                const response = await apiClient.post(`/auth/refresh`, null, {
+                    returnFullResponse: true // 인증 토큰 관련 로직용 플래그
+                });
+                // 헤더에서 토큰 추출
+                const authHeader = response.headers.authorization;
+                let newAccessToken;
+                if (authHeader && authHeader.startsWith('Bearer ')) {
+                    newAccessToken = authHeader.split('Bearer ')[1];
+                }
+                // 로컬 스토리지에 저장
+                localStorage.setItem("accessToken", newAccessToken);
+
+                //갱신 성공, 대기열 요청 처리
+                processQueue(null, newAccessToken);
+
+                // 큐에있던 실패했던 원래 요청도 새 토큰으로 재시도
+                originalRequest.headers.authorization = `Bearer ${newAccessToken}`;
+                return apiClient(originalRequest);
+            } catch (refreshError) {
+                console.error("토큰 갱신 실패, 재로그인", refreshError);
+
+                //대기열 요청 전부 실패 처리
+                processQueue(refreshError, null);
+
+                //logout 요청, 서버 토큰 정리, 로그인 페이지 이동
+                await apiClient.post(`/auth/logout`);
+                if (window.location.pathname !== '/login') {
+                    window.location.href = "/login";
+                }
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false; //갱신 작업 완료
             }
         }
-        console.error('Axios 실패:', error.response.status, error.response.data);
+        // T001, T003: 유효하지 않은 토큰, 즉시 로그아웃
+        else if (errorData.code===`T001`||errorData.code===`T003`) {
+            console.error("유효하지 않은 토큰, 로그아웃", errorData.message);
+            // 플래그와 큐 초기화
+            // 다른 요청이 존재할 수도 있으니
+            isRefreshing = false;
+            failedQueue = [];
 
-        //공통 에러 메시지나, 로그 남기기가능
+            await apiClient.post(`/auth/logout`);
+            window.location.href = "/login";
+            return Promise.reject(error);
+        }
+        console.error(`Axios 실패 (401 이외): `, error.response.status, error.response.data);
         return Promise.reject(error);
     }
 );
+
 export default apiClient;
+
