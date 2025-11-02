@@ -12,11 +12,18 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
     try {
         // login 함수 반환 대기
-        const tokens = await login(emailValue, passwordValue);
-        const currentUser = tokens.nickname;
+        const response = await login(emailValue, passwordValue);
+        console.log(response);
+        const currentUser = response.nickname;
+        const authHeader = response.authHeader;
+        let newAccessToken;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            newAccessToken = authHeader.split('Bearer ')[1];
+        }
+        console.log(newAccessToken);
+        localStorage.setItem("accessToken", newAccessToken);
+
         // 각각 다른 이름(키)로 localStorage에 저장
-        localStorage.setItem("accessToken", tokens.accessToken);
-        localStorage.setItem("refreshToken", tokens.refreshToken);
         sessionStorage.setItem("currentUser", currentUser );
         console.log('토큰 저장 성공');
 
