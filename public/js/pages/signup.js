@@ -201,17 +201,12 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
         }
     }
 
-    //TODO 회원가입 성공 토큰 제거 고민
     try {
         const signupData = await signup(emailValue, passwordValue, nicknameValue, profileImageKey);
 
-        //캐싱
-        localStorage.setItem('accessToken', signupData.accessToken);
-        localStorage.setItem('refreshToken', signupData.refreshToken);
-
         // 페이지 이동
         alert('회원가입 성공');
-        window.location.href = '/index'; //토큰 발급도 끝났으니 바로 메인이동하는게 좋지 않나?
+        window.location.href = '/login';
     } catch (error) {
         console.error('회원가입 실패:', error);
         alert('회원가입에 실패했습니다.');
