@@ -1,7 +1,5 @@
 import apiClient from "/js/api/api.js";
 
-
-//fetchPosts 함수를 만들어서 '수출'하기
 //회원가입 요청
 export async function signup(email, password, nickname, profileImageKey) {
     try {

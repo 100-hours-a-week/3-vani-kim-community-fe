@@ -27,7 +27,7 @@ apiClient.interceptors.request.use(
 )
 
 //응답 인터셉터
-//TODO 갱신 요청은 필터 없이들어가서 오류의 형식이달라 문제 발생
+//TODO 갱신 요청은 필터 없이 들어가서 필터에서의 오류의 형식이달라 문제 발생
 //요청 대기열, 게시글 상세페이지등 한페이지에 여러 api요청이 있으면 여러번 갱신 요청 방지
 let isRefreshing = false; // 토큰 갱신 중 여부 확인용
 let failedQueue = []; // 갱신을 기다리는 요청 대기열
@@ -59,8 +59,7 @@ apiClient.interceptors.response.use(
 
         // 401 에러가 아니거나, data가 없으면 그냥 실패 처리
         if (error.response.status !== 401 || !error.response.data) {
-            console.er
-            ror('Axios 실패, (Non-401):', error,response?.status, error.response.data);
+            console.error('Axios 실패, (Non-401):', error,response?.status, error.response.data);
             return Promise.reject(error);
         }
 
@@ -132,7 +131,7 @@ apiClient.interceptors.response.use(
             }
         }
         // T001, T003: 유효하지 않은 토큰, 즉시 로그아웃
-        else if (errorData.code===`T001`||errorData.code===`T003`) {
+        else if (errorData.code===`T001`||errorData.code===`T003`|| errorData.code === 'E401-1') {
             console.error("유효하지 않은 토큰, 로그아웃", errorData.message);
             // 플래그와 큐 초기화
             // 다른 요청이 존재할 수도 있으니

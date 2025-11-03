@@ -1,12 +1,13 @@
 const API_URL = "http://localhost:8080";
 import apiClient from "/js/api/api.js";
 
-export async function getPresignTempUrl(fileName, contentType, fileSize){
+export async function getPresignTempUrl(fileName, contentType, fileSizeByte, category){
     try{
         const response = await apiClient.post(`${API_URL}/api/v1/uploads/presign/temp`, {
             fileName,
             contentType,
-            fileSize
+            fileSizeByte,
+            category
         })
         return response;
     } catch (error) {
@@ -17,7 +18,7 @@ export async function getPresignTempUrl(fileName, contentType, fileSize){
 
 export async function getPresignUrl(fileName, contentType, fileSize, category){
     try{
-        const response = await apiClient.post(`${API_URL}/api/v1/uploads/presign/temp`,
+        const response = await apiClient.post(`${API_URL}/api/v1/uploads/presign`,
             fileName,
             contentType,
             fileSize,
@@ -52,6 +53,24 @@ export async function uploadToS3(presignedUrl, imageFile) {
         return response;
     } catch (error) {
         console.error('이미지 업로드 실패', error);
+        throw error;
+    }
+}
+
+export async function getFromS3(presignedUrl) {
+    try {
+        const response = await fetch(presignedUrl, {
+            method: "GET",
+
+        });
+
+        if (!response.ok) {
+            throw new Error(`S3 불러오기에 실패했습니다. : ${response.status} ${response.statusText}`);
+        }
+
+        return await response.blob();
+    } catch (error) {
+        console.error('이미지 불러오기 실패', error);
         throw error;
     }
 }
