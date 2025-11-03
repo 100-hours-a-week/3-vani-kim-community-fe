@@ -14,6 +14,7 @@ function checkFormValidity() {
     const allValid = Object.values(validationState).every(status => status === true);
     signupButton.disabled = !allValid;
 }
+
 //TODO 원래 이미지가 있었으면 변경 실패하면 그거로 유지 시켜줘야함
 // 1. 선택한 이미지 미리보기 및 이미지 크기 검사
 const imageInput = document.getElementById('image-input');
@@ -181,17 +182,32 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
     const nicknameValue = document.getElementById('nickname').value;
 
     //입력으로 받은 이미지파일
-    // const imageFile = document.getElementById('image-input').files[0];
-
+    const imageFile = document.getElementById('image-input').files[0];
+    console.log(imageFile.name, imageFile.size, imageFile.type);
     //이미지 처리
     let profileImageKey = null;
+
     if (imageFile) {
+        let presignedUrl;
+
+        //1. Presigned URL 요청(서버)
         try {
             //서버에 Presigned URL 요청
-            const{ presignedUrl, fileUrl, contentType } = await getPresignTempUrl(
-                imageFile.name, imageFile.type, imageFile.size);
+            const presignedData = await getPresignTempUrl(
+                imageFile.name, imageFile.type, imageFile.size, "TEMP_PROFILE_IMAGE"
+            );
 
-            //S3에 업로드
+            presignedUrl = presignedData.presignedUrl;
+            profileImageKey = presignedData.objectKey;
+        } catch (serverError) {
+            console.error('Presigned URL 요청 실패:', serverError);
+            // TODO: serverError.response.data.message 처럼 좀 더 구체적으로
+            alert('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
+            return;
+        }
+
+        //2. S3에 업로드
+        try {
             await uploadToS3(presignedUrl, imageFile);
 
         } catch (error) {
@@ -200,7 +216,7 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
             return; // 회원가입 중단
         }
     }
-
+    //3. 서버에 업로드 성공한 imageKey와 함께 회원 가입 요청
     try {
         const signupData = await signup(emailValue, passwordValue, nicknameValue, profileImageKey);
 

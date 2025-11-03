@@ -1,11 +1,13 @@
-
+import { getUser } from "/js/api/user.js";
+import { logout } from "/js/api/auth.js";
+//TODO logout시 요청 반복되는 문제 해결해야함..
 document.addEventListener("DOMContentLoaded", function() {
 
     // 1. fetch로 layout.html 파일을 한 번만 가져옴
     fetch('/layout.html')
         .then(response => {
             if (!response.ok) {
-                throw new Error('네트워크 응답 망함! (layout.html)');
+                throw new Error('네트워크 응답 실패! (layout.html)');
             }
             return response.text();
         })
@@ -30,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function() {
             injectHtml('header-placeholder', headerHtml);
             injectHtml('sidebar-placeholder', sidebarHtml);
             injectHtml('footer-placeholder', footerHtml);
+
+            //6. 헤더 주입 후, 프로필 로드 함수 호출
+            loadUserProfile();
+
         })
         .catch(error => {
             console.error('레이아웃 로드 실패:', error);
@@ -75,21 +81,44 @@ document.addEventListener('DOMContentLoaded', () =>{
 function handleLogout() {
     if (confirm("정말 로그아웃하시겠습니까?")) {
 
-        // 1.세션 스토리지의 토큰 및 사용자 정보 삭제
+        // 1. 스토리지의 토큰 및 사용자 정보 삭제
         //    (로그인 시 저장했던 모든 키를 삭제해야 함)
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        sessionStorage.removeItem("currentUser");
 
-        // 2. TODO 서버에 로그아웃 API 호출 (블랙리스트/DB 토큰 삭제 등)
-        // (예: await api.post('/auth/logout');)
-        // ...
+
+        // 2. 서버에 로그아웃 API 호출 (블랙리스트/DB 토큰 삭제 등)
+        logout();
 
         // 3. 로그인 페이지로 리다이렉트
         alert("로그아웃되었습니다.");
         window.location.href = '/login'; // 로그인 페이지 경로
     }
 }
+
+async function loadUserProfile() {
+
+    try {
+        const user = await getUser();
+        const profileImageUrl = user.presignedProfileImageUrl;
+
+        if (!profileImageUrl) {
+            console.log('등록된 프로필 이미지가 없습니다.');
+            return;
+        }
+
+        const userImageElem = document.getElementById('user-menu-trigger');
+
+        if (userImageElem) {
+            userImageElem.src = profileImageUrl;
+        } else {
+            console.warn("'user-menu-trigger' <img> 태그를 찾을 수 없습니다.")
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
 
 /**
  * ID에 HTML을 주입하고, ID가 없는 경우 경고를 출력하는 헬퍼 함수

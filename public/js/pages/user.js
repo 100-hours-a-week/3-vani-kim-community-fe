@@ -1,9 +1,19 @@
 import {getUser, withdrawUser, updateUser, updatePassword} from "/js/api/user.js";
+
 import {nicknameCheck} from "/js/api/auth.js";
 
 document.addEventListener("DOMContentLoaded", async function (){
     const user = await getUser();
-// TODO 이미지 처리
+    const profileImageUrl = user.presignedProfileImageUrl;
+
+    const userImageElem = document.getElementById('profile-image');
+
+    if (userImageElem) {
+        userImageElem.src = profileImageUrl;
+    } else {
+        console.warn("'profile-image' <img> 태그를 찾을 수 없습니다.")
+    }
+
     document.getElementById("email").value = "email"
     document.getElementById("nickname").value = user.nickname;
 });
