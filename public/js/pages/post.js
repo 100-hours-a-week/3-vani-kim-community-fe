@@ -53,7 +53,7 @@ export function setupPostActionListeners(post) {
         const editLink = document.createElement("a");
         editLink.href = `/post/${post.postId}/edit`;
         editLink.className = 'button';
-        editLink.textContent = '수정;';
+        editLink.textContent = '수정';
 
         const deleteBtn = document.createElement("button");
         deleteBtn.type = "button";

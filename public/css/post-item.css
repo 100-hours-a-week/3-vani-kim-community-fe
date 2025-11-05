@@ -87,6 +87,33 @@ a:hover {
 
 .infinite-scroll-trigger{
     height: 50px;
+    position: relative;
+}
+
+.infinite-scroll-trigger.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.infinite-scroll-trigger.loading {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 .end-of-list-message{
     display: none;

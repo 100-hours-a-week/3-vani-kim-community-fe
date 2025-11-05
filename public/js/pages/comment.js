@@ -53,9 +53,24 @@ export function handleCommentClick(event) {
     if (moreBtn) {
         const menu = moreBtn.nextElementSibling;  //.moreBtn
         if (menu && menu.classList.contains('more-menu')) {
+            // 다른 메뉴들 닫기
+            const allMenus = document.querySelectorAll('.more-menu.active');
+            allMenus.forEach(m => {
+                if (m !== menu) {
+                    m.classList.remove('active');
+                }
+            });
+            // 현재 메뉴 토글
             menu.classList.toggle("active");
         }
         return;
+    }
+
+    // 메뉴 외부 클릭 시 모든 메뉴 닫기
+    const isMenuClick = clickedElement.closest('.more-menu') || clickedElement.closest('.more-btn');
+    if (!isMenuClick) {
+        const allMenus = document.querySelectorAll('.more-menu.active');
+        allMenus.forEach(menu => menu.classList.remove('active'));
     }
 
     //삭제 버튼
@@ -89,6 +104,12 @@ async function loadNextPage() {
 
     isloading = true;
 
+    // 로딩 인디케이터 표시
+    const trigger = document.getElementById('infinite-scroll-trigger');
+    if (trigger) {
+        trigger.classList.add('loading');
+    }
+
     try {
         const { comments: newComments } = await getComments(currentCursor);
         if (newComments === 0) {
@@ -100,6 +121,10 @@ async function loadNextPage() {
         console.error("다음 페이지 로딩 실패: ", error);
     } finally {
         isloading = false;
+        // 로딩 인디케이터 제거
+        if (trigger) {
+            trigger.classList.remove('loading');
+        }
     }
 }
 

@@ -23,6 +23,11 @@ async function loadNextPage() {
     if (isLoading||!hasMore) return;
     isLoading = true;
 
+    // 로딩 인디케이터 표시
+    if (scrollTrigger) {
+        scrollTrigger.classList.add('loading');
+    }
+
     try {
         const response = await getPosts(currentCursor.id, currentCursor.createdAt, PAGE_SIZE);
         const newPosts = response.items;
@@ -84,6 +89,10 @@ async function loadNextPage() {
         console.error("다음 페이지 로딩 실패: ", error);
     } finally {
         isLoading = false;
+        // 로딩 인디케이터 제거
+        if (scrollTrigger) {
+            scrollTrigger.classList.remove('loading');
+        }
     }
 }
 
