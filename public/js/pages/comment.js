@@ -3,7 +3,7 @@ import {getComments} from "/js/api/comments.js";
 
 /**
  * 템플릿을 이용해서 댓글을 랜더링하는 합수
- * @param comment :요청을 통해 가져온 comment 객체
+ * @param comment 요청을 통해 가져온 comment 객체
  * */
 export function renderComment(comment) {
 

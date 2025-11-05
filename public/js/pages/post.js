@@ -1,20 +1,17 @@
-import { getPost, deletePost } from "/js/api/postApi.js";
+import { deletePost } from "/js/api/postApi.js";
 
 document.addEventListener("DOMContentLoaded", function() {})
 
 // 게시글 상세페이지 조회를 위해 게시글에 관한 함수를 모아놓은 파일
-
-//TODO 뭘 토글 하려고 만든지 모르겠음...
-function toggleMenu(buttonElement) {
-    const menu = buttonElement.nextElementSibling;
-    menu.classList.toggle("active");
-}
-
 //게시글 렌더링 시작
 export function renderPost(post) {
+    const title = post.title;
+    const author = post.author.nickname;
+    const postImageUrl = post.contentDetail.postImageUrl;
+
     document.getElementById("post-title").textContent = post.title;
     document.getElementById("post-author-id").textContent = post.author.nickname;
-    // TODO 유저의 아이디가 반환값이 없음 수정 필요
+    // TODO 유저의 아이디가 반환값이 없음 수정 필요(유저 프로필 누르면 유저 정보페이지 이동용), 타인이 볼 수 있는 유저 페이지 확장 필요
     // document.getElementById("post-author-link").href = `/user/${post.authorId}`;
 
     const postDate = document.getElementById("post-date");
@@ -23,11 +20,14 @@ export function renderPost(post) {
     // 검색엔진 등에 노출되는 기계가 보는 시간
     postDate.dateTime = post.createdAt;
 
-    const postImg = document.getElementById('post-img');
+    const postImageElem = document.getElementById('post-img');
 
-    //TODO 키를 넘기고있음... Presignedurl 받아야함
-    //postImg.src = imageUrl;
-    postImg.alt = post.title;
+    if (postImageElem) {
+        postImageElem.src = postImageUrl;
+    } else {
+        console.warn("'post-img' <img> 태그를 찾을 수 없습니다.")
+    }
+
 
     document.getElementById("post-body").textContent = post.contentDetail.content;
 
@@ -44,7 +44,6 @@ export function renderPost(post) {
  * 권한을 가진사람에게만 보여야하므로 권한 확인후 생성
  * 버튼 렌더링과 이벤트 연결
  * */
-
 export function setupPostActionListeners(post) {
     const postActions = document.getElementById("post-actions");
     const currentUser = sessionStorage.getItem("currentUser");
