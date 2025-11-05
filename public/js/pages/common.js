@@ -96,7 +96,10 @@ function handleLogout() {
 }
 
 async function loadUserProfile() {
-
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        return;
+    }
     try {
         const user = await getUser();
         const profileImageUrl = user.presignedProfileImageUrl;

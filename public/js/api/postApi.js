@@ -1,10 +1,10 @@
 import apiClient from "/js/api/api.js";
 
-const API_URL = "http://localhost:8080";
+
 
 export async function getPosts(cursorId, cursorCreatedAt, size){
     try {
-        const response = await apiClient.get(`${API_URL}/posts`, {
+        const response = await apiClient.get(`/posts`, {
             //null이면 포함 안시킴
             params: {
                 cursorId,
@@ -22,7 +22,7 @@ export async function getPosts(cursorId, cursorCreatedAt, size){
 
 export async function getPost(postId){
     try {
-        const response = await apiClient.get(`${API_URL}/posts/${postId}`);
+        const response = await apiClient.get(`/posts/${postId}`);
         return response;
     } catch (error) {
         console.error('게시글 조회 실패', error);
@@ -33,7 +33,7 @@ export async function getPost(postId){
 
 export async function creatPost(title, content, postImageKey){
     try {
-        const response = await apiClient.post(`${API_URL}/posts`, {
+        const response = await apiClient.post(`/posts`, {
             title,
             content,
             postImageKey
@@ -47,7 +47,7 @@ export async function creatPost(title, content, postImageKey){
 
 export async function updatePost(postId, title, content, postImageKey){
     try {
-        const response = await apiClient.patch(`${API_URL}/posts/${postId}`, {
+        const response = await apiClient.patch(`/posts/${postId}`, {
             title,
             content,
             postImageKey
@@ -62,7 +62,7 @@ export async function updatePost(postId, title, content, postImageKey){
 
 export async function deletePost(postId){
     try {
-        const response = await apiClient.delete(`${API_URL}/posts/${postId}`);
+        const response = await apiClient.delete(`/posts/${postId}`);
         return response;
     } catch (error) {
         console.error('게시글 삭제 실패', error);

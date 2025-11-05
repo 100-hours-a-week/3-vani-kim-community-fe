@@ -1,10 +1,9 @@
 import apiClient from "/js/api/api.js";
-const API_URL = "http://localhost:8080";
 
 
 export async function getUser() {
     try {
-        const response = await apiClient.get(`${API_URL}/users/me`);
+        const response = await apiClient.get(`/users/me`);
         return response;
     } catch (error) {
         console.error('유저 조회 실패', error.message);
@@ -14,7 +13,7 @@ export async function getUser() {
 
 export async function updateUser(nickname, profileImageKey) {
     try {
-        const response = await apiClient.patch(`${API_URL}/user/me`, {
+        const response = await apiClient.patch(`/user/me`, {
             nickname,
             profileImageKey
         });
@@ -27,7 +26,7 @@ export async function updateUser(nickname, profileImageKey) {
 
 export async function withdrawUser(password) {
     try {
-        const response = await apiClient.patch(`${API_URL}/user/me`, {
+        const response = await apiClient.patch(`/user/me`, {
             password
         });
         return response;
@@ -39,7 +38,7 @@ export async function withdrawUser(password) {
 
 export async function updatePassword(password) {
     try {
-        const response = await apiClient.patch(`${API_URL}/user/me`, {
+        const response = await apiClient.patch(`/user/me`, {
             password
         });
         return response;

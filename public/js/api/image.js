@@ -1,9 +1,8 @@
-const API_URL = "http://localhost:8080";
 import apiClient from "/js/api/api.js";
 
 export async function getPresignTempUrl(fileName, contentType, fileSizeByte, category){
     try{
-        const response = await apiClient.post(`${API_URL}/api/v1/uploads/presign/temp`, {
+        const response = await apiClient.post(`/uploads/presign/temp`, {
             fileName,
             contentType,
             fileSizeByte,
@@ -18,7 +17,7 @@ export async function getPresignTempUrl(fileName, contentType, fileSizeByte, cat
 
 export async function getPresignUrl(fileName, contentType, fileSize, category){
     try{
-        const response = await apiClient.post(`${API_URL}/api/v1/uploads/presign`,
+        const response = await apiClient.post(`/uploads/presign`,
             fileName,
             contentType,
             fileSize,
