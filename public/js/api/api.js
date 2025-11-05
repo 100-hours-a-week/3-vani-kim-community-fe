@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "http://localhost:8080/api/v1";
 //axios 인스턴스 생성
 //응답대기 5초
 const apiClient = axios.create({
