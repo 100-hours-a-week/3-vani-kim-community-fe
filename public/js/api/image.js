@@ -15,14 +15,14 @@ export async function getPresignTempUrl(fileName, contentType, fileSizeByte, cat
     }
 }
 
-export async function getPresignUrl(fileName, contentType, fileSize, category){
+export async function getPresignUrl(fileName, contentType, fileSizeByte, category){
     try{
-        const response = await apiClient.post(`/uploads/presign`,
-            fileName,
-            contentType,
-            fileSize,
-            category
-            );
+        const response = await apiClient.post(`/uploads/presign`, {
+                fileName,
+                contentType,
+                fileSizeByte,
+                category
+            });
         return response;
     } catch (error) {
         console.error('업로드 URL 발급 실패', error);
