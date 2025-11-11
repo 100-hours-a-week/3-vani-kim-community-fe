@@ -1,6 +1,6 @@
-// const API_URL = "http://localhost:8080/api/v1";
+const API_URL = "http://localhost:8080/api/v1";
 // 배포할 때는 localhost:8080하면 안된다.
-const API_URL = "/api/v1";
+// const API_URL = "/api/v1";
 
 
 //axios 인스턴스 생성

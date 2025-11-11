@@ -14,7 +14,7 @@ function checkFormValidity() {
     const allValid = Object.values(validationState).every(status => status === true);
     signupButton.disabled = !allValid;
 }
-
+//TODO 닉네임 확인후 다른 거하고 회원가입 누르면 버튼 활성화 안되는 버그 있음.
 //TODO 원래 이미지가 있었으면 변경 실패하면 그거로 유지 시켜줘야함
 // 1. 선택한 이미지 미리보기 및 이미지 크기 검사
 const imageInput = document.getElementById('image-input');

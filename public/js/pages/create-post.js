@@ -38,10 +38,8 @@ document.getElementById('post-form').addEventListener('submit', async (event) =>
     //TODO S3 연동해야함+이미지 처리로직
     //입력으로 받은 이미지파일
     const imageFile = document.getElementById('image-input').files[0];
-    console.log('아무것도 안나와?');
     let postImageKey = null;
     if (imageFile) {
-        console.log('이거 하면 안된다.');
         let presignedUrl;
         //1. Presigned URL 요청(서버)
         try {
